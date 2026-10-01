@@ -238,6 +238,69 @@
         <div class="flex flex-col sm:flex-row gap-3 justify-center items-center mt-4">
             
             <!-- Blow Candle Button -->
+<script>
+  let isCandleOn = true;
+  let audioContext;
+  let analyser;
+  let microphone;
+
+  // Fungsi toggle standar untuk tombol
+  function toggleCandle() {
+    isCandleOn = !isCandleOn;
+    const btnText = document.getElementById("blowBtnText");
+    
+    if (isCandleOn) {
+      btnText.innerText = "Tiup Lilin";
+      // Logika untuk menyalakan api lilin (misal: tampilkan elemen api)
+      console.log("Lilin menyala");
+    } else {
+      btnText.innerText = "Nyalakan Lilin";
+      // Logika untuk mematikan api lilin (misal: sembunyikan elemen api)
+      console.log("Lilin mati");
+    }
+  }
+
+  // Aktifkan sensor tiupan mikrofon saat halaman di-klik pertama kali
+  document.body.addEventListener("click", initBlowDetection, { once: true });
+
+  async function initBlowDetection() {
+    try {
+      // 1. Minta izin akses mikrofon HP
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      microphone = audioContext.createMediaStreamSource(stream);
+      
+      analyser.fftSize = 256;
+      microphone.connect(analyser);
+
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      function checkBlow() {
+        analyser.getByteFrequencyData(dataArray);
+        
+        // Hitung rata-rata volume suara/hembusan
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+          sum += dataArray[i];
+        }
+        let average = sum / dataArray.length;
+
+        // Ambang batas (threshold) volume tiupan (bisa disesuaikan, misal 50 - 80)
+        if (average > 65 && isCandleOn) {
+          toggleCandle(); // Matikan lilin jika ditiup
+        }
+
+        requestAnimationFrame(checkBlow);
+      }
+
+      checkBlow();
+    } catch (err) {
+      console.log("Akses mikrofon ditolak atau tidak didukung:", err);
+    }
+  }
+</script>
+            
             <button id="blowBtn" onclick="toggleCandle()" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2">
                 <i class="fa-solid fa-wind"></i>
                 <span id="blowBtnText">Tiup Lilin</span>
