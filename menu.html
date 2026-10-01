@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kamu mau pilih yang mana?</title>
+  <!-- Menggunakan font Google 'Caveat' agar mirip dengan tulisan tangan pada gambar -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #e0e5ff; /* Warna latar biru muda lembut */
+      font-family: 'Caveat', cursive, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .options-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.3s ease;
+    }
+
+    /* Efek bergerak mengapung halus */
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .card img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      animation: float 3s ease-in-out infinite;
+      transition: transform 0.2s ease;
+    }
+
+    /* Durasi animasi sedikit berbeda agar gerakan bervariasi */
+    .card:nth-child(1) img { animation-delay: 0s; }
+    .card:nth-child(2) img { animation-delay: 0.5s; }
+    .card:nth-child(3) img { animation-delay: 1s; }
+
+    /* Efek membesar saat kursor diarahkan atau ditekan */
+    .card:hover img {
+      transform: scale(1.15) !important;
+    }
+
+    .card span {
+      margin-top: 15px;
+      font-size: 1.8rem;
+    }
+
+    /* Tombol Reset / Reload di bawah */
+    .reset-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: 2px solid #a0a0a0;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .reset-btn:hover {
+      transform: rotate(180deg);
+      border-color: #555;
+    }
+
+    .reset-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Kamu mau pilih yang mana? :)</h1>
+
+  <div class="options-container">
+    <!-- Opsi Surat -->
+    <div class="card"><a href="surat.html">
+      <img src="mail.png" alt="Surat"></a>
+      <span>Surat</span>
+    </div>
+
+    <!-- Opsi Musik -->
+    <div class="card"><a href="musik.html">
+      <img src="musical-note.png" alt="Musik"></a>
+      <span>Musik</span>
+    </div>
+
+    <!-- Opsi Kamera/Foto -->
+    <div class="card"><a href="kue.html">
+      <img src="camera.png" alt="Kamera"></a>
+      <span>Foto</span>
+    </div></div>
+
+  <!-- Tombol Refresh / Ulangi -->
+    <div class="card">
+   <a href="ultah.html"><img src="left-chevron.png" style="width: 40px; height: auto;">
+  </a></div>
+ </body>
+</html>

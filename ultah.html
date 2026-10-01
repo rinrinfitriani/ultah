@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun! 🎂</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #ffd1dc 0%, #ffe6e8 40%, #e8dff5 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-pacifico {
+            font-family: 'Pacifico', cursive;
+        }
+
+        /* Float animation for the entire cake assembly */
+        @keyframes floatCake {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+        }
+
+        .animate-float {
+            animation: floatCake 4s ease-in-out infinite;
+        }
+
+        /* Flame flicker animation */
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+            20% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+            40% { transform: scale(0.95) rotate(-1deg); opacity: 0.85; }
+            60% { transform: scale(1.05) rotate(1deg); opacity: 1; }
+            80% { transform: scale(0.98) rotate(-2deg); opacity: 0.9; }
+            100% { transform: scale(1) rotate(0deg); opacity: 0.95; }
+        }
+
+        /* Candle Flame Design */
+        .flame {
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 26px;
+            background: linear-gradient(to bottom, #fff7a1 0%, #ffa100 50%, #ff4500 100%);
+            border-radius: 50% 50% 35% 35% / 60% 60% 40% 40%;
+            box-shadow: 0 0 15px #ffa100, 0 0 30px #ff4500;
+            animation: flicker 0.6s ease-in-out infinite alternate;
+            transform-origin: center bottom;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .flame-off {
+            opacity: 0 !important;
+            transform: translateX(-50%) scale(0) !important;
+        }
+
+        /* Smoke effect when candle is blown out */
+        .smoke {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: rgba(200, 200, 200, 0.6);
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes riseSmoke {
+            0% { opacity: 0.8; transform: translate(-50%, 0) scale(1); }
+            100% { opacity: 0; transform: translate(-80%, -40px) scale(3); filter: blur(4px); }
+        }
+
+        .smoke-active {
+            animation: riseSmoke 1.5s ease-out forwards;
+        }
+
+        /* Cake Drips */
+        .drip {
+            width: 100%;
+            height: 18px;
+            background-color: #fff0f3;
+            border-radius: 0 0 10px 10px;
+            position: relative;
+        }
+
+        .drip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: radial-gradient(circle at 10px 0, #fff0f3 10px, transparent 11px) repeat-x;
+            background-size: 20px 20px;
+        }
+
+        /* Custom Box Shadow for depth */
+        .cake-shadow {
+            box-shadow: 0 15px 25px rgba(219, 112, 147, 0.25);
+        }
+
+        /* Plate Shadow */
+        .plate-shadow {
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Sparkle Animation */
+        @keyframes pulseSparkle {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .sparkle {
+            animation: pulseSparkle 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4 relative min-h-screen">
+
+    <!-- Background Decorative Elements -->
+    <div class="absolute top-10 left-10 text-pink-300 opacity-40 text-4xl sparkle" style="animation-delay: 0s;"><i class="fa-solid fa-star"></i></div>
+    <div class="absolute top-20 right-12 text-purple-300 opacity-40 text-3xl sparkle" style="animation-delay: 0.5s;"><i class="fa-solid fa-heart"></i></div>
+    <div class="absolute bottom-16 left-16 text-yellow-300 opacity-40 text-3xl sparkle" style="animation-delay: 1s;"><i class="fa-solid fa-crown"></i></div>
+    <div class="absolute bottom-20 right-20 text-pink-300 opacity-40 text-4xl sparkle" style="animation-delay: 1.5s;"><i class="fa-solid fa-sparkles"></i></div>
+
+    <!-- Card Container -->
+    <div class="max-w-md w-full bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 text-center shadow-xl border border-white/60 z-10 relative my-6">
+        
+        <!-- Header / Greeting -->
+        <div class="mb-4">
+            <span class="inline-block bg-pink-100 text-pink-600 px-4 py-1 rounded-full text-sm font-semibold tracking-wide uppercase mb-2">
+                Special Day
+            </span>
+            <h1 id="greetingText" class="font-pacifico text-3xl md:text-4xl text-pink-500 transition-all duration-500">
+                Selamat Ulang Tahun!
+            </h1>
+            <p class="text-gray-600 text-sm md:text-base mt-2">
+                Semoga harimu penuh kebahagiaan, kedamaian, dan impian yang terwujud! ✨
+            </p>
+        </div>
+
+        <!-- CAKE CONTAINER -->
+        <div class="relative my-10 flex flex-col items-center justify-center min-h-[260px] animate-float">
+            
+            <!-- TOP DECORATION / CHERRIES & CANDLE -->
+            <div class="relative z-30 flex items-center justify-center gap-4 mb-[-8px]">
+                
+                <!-- Left Cherry -->
+                <div class="w-6 h-6 bg-red-500 rounded-full shadow-md relative">
+                    <div class="w-2 h-2 bg-white/50 rounded-full top-1 left-1 absolute"></div>
+                    <div class="w-4 h-6 border-t-2 border-r-2 border-amber-800 rounded-tr-full absolute -top-4 left-3"></div>
+                </div>
+
+                <!-- CANDLE ASSEMBLY -->
+                <div id="candle" class="relative cursor-pointer group" onclick="toggleCandle()" title="Klik untuk tiup lilin!">
+                    <!-- Flame -->
+                    <div id="flame" class="flame"></div>
+                    <!-- Smoke (hidden by default) -->
+                    <div id="smoke" class="smoke"></div>
+                    <!-- Candle Body -->
+                    <div class="w-4 h-14 bg-gradient-to-r from-yellow-200 via-amber-100 to-yellow-300 rounded-t-sm shadow-inner relative overflow-hidden border border-amber-200/50">
+                        <!-- Stripes on candle -->
+                        <div class="w-full h-2 bg-pink-300/60 my-2 transform -rotate-12 scale-125"></div>
+                        <div class="w-full h-2 bg-pink-300/60 my-2 transform -rotate-12 scale-125"></div>
+                    </div>
+                </div>
+
+                <!-- Right Cherry -->
+                <div class="w-6 h-6 bg-red-500 rounded-full shadow-md relative">
+                    <div class="w-2 h-2 bg-white/50 rounded-full top-1 left-1 absolute"></div>
+                    <div class="w-4 h-6 border-t-2 border-l-2 border-amber-800 rounded-tl-full absolute -top-4 -left-1"></div>
+                </div>
+
+            </div>
+
+            <!-- TIER 1 (TOP TIER) -->
+            <div class="w-36 h-16 bg-pink-300 rounded-t-2xl relative z-20 cake-shadow border-t-4 border-pink-200 overflow-hidden flex flex-col justify-between">
+                <!-- Cream Drip -->
+                <div class="drip"></div>
+                <!-- Sprinkles Decoration -->
+                <div class="flex justify-around px-3 mb-2">
+                    <span class="w-2 h-2 rounded-full bg-yellow-300 inline-block"></span>
+                    <span class="w-2 h-2 rounded-full bg-white inline-block"></span>
+                    <span class="w-2 h-2 rounded-full bg-purple-300 inline-block"></span>
+                    <span class="w-2 h-2 rounded-full bg-blue-300 inline-block"></span>
+                </div>
+            </div>
+
+            <!-- TIER 2 (MIDDLE TIER) -->
+            <div class="w-48 h-20 bg-purple-200 rounded-t-2xl relative z-10 cake-shadow -mt-2 border-t-4 border-purple-100 overflow-hidden flex flex-col justify-between">
+                <!-- Frosting Layer -->
+                <div class="w-full h-4 bg-white/90"></div>
+                <!-- Middle Layer Decoration Pattern -->
+                <div class="flex justify-evenly items-center my-auto">
+                    <div class="w-3 h-3 bg-pink-400 rounded-full"></div>
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                    <div class="w-3 h-3 bg-pink-400 rounded-full"></div>
+                    <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
+                </div>
+                <!-- Cream Base Edge -->
+                <div class="w-full h-3 bg-pink-200"></div>
+            </div>
+
+            <!-- TIER 3 (BOTTOM TIER) -->
+            <div class="w-60 h-22 bg-amber-100 rounded-t-2xl relative z-0 cake-shadow -mt-2 border-t-4 border-amber-50 overflow-hidden flex flex-col justify-between">
+                <!-- Top Frosting -->
+                <div class="w-full h-5 bg-pink-400"></div>
+                <!-- Decorative Swirls -->
+                <div class="flex justify-around items-center px-4">
+                    <span class="text-pink-300 text-xs">♥</span>
+                    <span class="text-purple-300 text-xs">♥</span>
+                    <span class="text-pink-300 text-xs">♥</span>
+                    <span class="text-purple-300 text-xs">♥</span>
+                    <span class="text-pink-300 text-xs">♥</span>
+                </div>
+                <!-- Chocolate/Caramel Base -->
+                <div class="w-full h-4 bg-amber-200"></div>
+            </div>
+
+            <!-- CAKE PLATE -->
+            <div class="w-72 h-4 bg-slate-100 rounded-full border-b-4 border-slate-300 plate-shadow -mt-1 z-0 relative">
+                <div class="w-80 h-2 bg-slate-200/50 rounded-full -ml-4 mt-1"></div>
+            </div>
+
+        </div>
+
+        <!-- CONTROLS & INTERACTIVE BUTTONS -->
+        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center mt-4">
+            
+            <!-- Blow Candle Button -->
+            <button id="blowBtn" onclick="toggleCandle()" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-wind"></i>
+                <span id="blowBtnText">Tiup Lilin</span>
+            </button>
+
+            <!-- Confetti / Celebrate Button -->
+            <button onclick="triggerConfetti()" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-purple-400 to-indigo-400 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-sparkles"></i>
+                <span>Kembang Api 🎉</span>
+            </button>
+
+            <button class="w-full sm:w-auto px-5 py-4 bg-gradient-to-r from-purple-400 to-indigo-400 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-sparkles">
+            <a href=menu.html>Lanjut ==></a>
+            </button>
+
+        </div>
+
+        <!-- Microphone Blow Detection Switch -->
+        <div class="mt-4 pt-4 border-t border-gray-200/60 text-xs text-gray-500 flex items-center justify-center gap-2">
+            <button id="micBtn" onclick="toggleMic()" class="hover:text-pink-600 transition-colors flex items-center gap-1.5 bg-gray-100 px-3 py-1.5 rounded-lg">
+                <i id="micIcon" class="fa-solid fa-microphone"></i>
+                <span id="micStatus">Aktifkan Meniup via Mikrofon</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Footer Tag -->
+    <p class="text-xs text-gray-500 z-10 font-medium">Dibuat dengan ❤️ untuk hari istimewa By. RINRIN</p>
+
+    <script>
+        let isCandleLit = true;
+        let micStream = null;
+        let audioContext = null;
+        let analyser = null;
+        let isMicActive = false;
+
+        // Trigger confetti on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                triggerConfetti();
+            }, 500);
+        });
+
+        // Toggle Candle State (ON / OFF)
+        function toggleCandle() {
+            const flame = document.getElementById('flame');
+            const smoke = document.getElementById('smoke');
+            const blowBtnText = document.getElementById('blowBtnText');
+            const greetingText = document.getElementById('greetingText');
+
+            if (isCandleLit) {
+                // Extinguish Flame
+                flame.classList.add('flame-off');
+                
+                // Trigger Smoke Effect
+                smoke.classList.remove('smoke-active');
+                void smoke.offsetWidth; // Trigger reflow for animation restart
+                smoke.classList.add('smoke-active');
+
+                blowBtnText.innerText = 'Nyalakan Lilin';
+                greetingText.innerText = 'Make a Wish! Suamiku ✨ Nandi ✨';
+                
+                // Play celebratory fireworks when blown out
+                triggerConfetti();
+                playBlowSound();
+
+                isCandleLit = false;
+            } else {
+                // Ignite Flame
+                flame.classList.remove('flame-off');
+                smoke.classList.remove('smoke-active');
+
+                blowBtnText.innerText = 'Tiup Lilin';
+                greetingText.innerText = 'Selamat Ulang Tahun!';
+                
+                isCandleLit = true;
+            }
+        }
+
+        // Trigger Confetti Effect using Canvas-Confetti
+        function triggerConfetti() {
+            // Left burst
+            confetti({
+                particleCount: 50,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ffb7b2', '#ffda79', '#a29bfe', '#fd79a8']
+            });
+
+            // Right burst
+            confetti({
+                particleCount: 50,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ffb7b2', '#ffda79', '#a29bfe', '#fd79a8']
+            });
+        }
+
+        // Synthesize a simple soft blow sound using Web Audio API (No external sound files needed)
+        function playBlowSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const bufferSize = ctx.sampleRate * 0.5; // 0.5 seconds sound
+                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+
+                // Generate white noise for blow sound
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = ctx.createBufferSource();
+                noise.buffer = buffer;
+
+                // Filter for soft wind sound
+                const filter = ctx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 400;
+
+                const gain = ctx.createGain();
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(ctx.destination);
+
+                noise.start();
+            } catch (e) {
+                console.log("Audio API not supported or blocked.");
+            }
+        }
+
+        // Feature: Blow Candle via Microphone
+        async function toggleMic() {
+            const micStatus = document.getElementById('micStatus');
+            const micIcon = document.getElementById('micIcon');
+
+            if (isMicActive) {
+                // Stop Microphone
+                if (micStream) {
+                    micStream.getTracks().forEach(track => track.stop());
+                }
+                isMicActive = false;
+                micStatus.innerText = 'Aktifkan Meniup via Mikrofon';
+                micIcon.className = 'fa-solid fa-microphone';
+                return;
+            }
+
+            try {
+                micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                const source = audioContext.createMediaStreamSource(micStream);
+                
+                analyser.fftSize = 256;
+                source.connect(analyser);
+
+                isMicActive = true;
+                micStatus.innerText = 'Mikrofon Aktif! Tiup Layar/Mic';
+                micIcon.className = 'fa-solid fa-microphone-lines text-green-500 animate-pulse';
+
+                detectBlow();
+            } catch (err) {
+                alert('Akses mikrofon ditolak atau tidak didukung di perangkat ini.');
+                console.error(err);
+            }
+        }
+
+        // Detect high audio input (blowing into mic)
+        function detectBlow() {
+            if (!isMicActive) return;
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+
+            let sum = 0;
+            for (let i = 0; i < bufferLength; i++) {
+                sum += dataArray[i];
+            }
+            let average = sum / bufferLength;
+
+            // Threshold for blow detection
+            if (average > 45 && isCandleLit) {
+                toggleCandle();
+            }
+
+            requestAnimationFrame(detectBlow);
+        }
+    </script>
+</body>
+</html>
