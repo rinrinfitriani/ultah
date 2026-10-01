@@ -21,7 +21,6 @@
             font-family: 'Pacifico', cursive;
         }
 
-        /* Float animation for the entire cake assembly */
         @keyframes floatCake {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-12px) rotate(1deg); }
@@ -31,7 +30,6 @@
             animation: floatCake 4s ease-in-out infinite;
         }
 
-        /* Flame flicker animation */
         @keyframes flicker {
             0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
             20% { transform: scale(1.1) rotate(2deg); opacity: 1; }
@@ -41,7 +39,6 @@
             100% { transform: scale(1) rotate(0deg); opacity: 0.95; }
         }
 
-        /* Candle Flame Design */
         .flame {
             position: absolute;
             top: -28px;
@@ -62,7 +59,6 @@
             transform: translateX(-50%) scale(0) !important;
         }
 
-        /* Smoke effect when candle is blown out */
         .smoke {
             position: absolute;
             top: -25px;
@@ -84,7 +80,6 @@
             animation: riseSmoke 1.5s ease-out forwards;
         }
 
-        /* Cake Drips */
         .drip {
             width: 100%;
             height: 18px;
@@ -104,17 +99,14 @@
             background-size: 20px 20px;
         }
 
-        /* Custom Box Shadow for depth */
         .cake-shadow {
             box-shadow: 0 15px 25px rgba(219, 112, 147, 0.25);
         }
 
-        /* Plate Shadow */
         .plate-shadow {
             box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
         }
 
-        /* Sparkle Animation */
         @keyframes pulseSparkle {
             0%, 100% { transform: scale(1); opacity: 0.8; }
             50% { transform: scale(1.2); opacity: 1; }
@@ -185,9 +177,7 @@
 
             <!-- TIER 1 (TOP TIER) -->
             <div class="w-36 h-16 bg-pink-300 rounded-t-2xl relative z-20 cake-shadow border-t-4 border-pink-200 overflow-hidden flex flex-col justify-between">
-                <!-- Cream Drip -->
                 <div class="drip"></div>
-                <!-- Sprinkles Decoration -->
                 <div class="flex justify-around px-3 mb-2">
                     <span class="w-2 h-2 rounded-full bg-yellow-300 inline-block"></span>
                     <span class="w-2 h-2 rounded-full bg-white inline-block"></span>
@@ -198,24 +188,19 @@
 
             <!-- TIER 2 (MIDDLE TIER) -->
             <div class="w-48 h-20 bg-purple-200 rounded-t-2xl relative z-10 cake-shadow -mt-2 border-t-4 border-purple-100 overflow-hidden flex flex-col justify-between">
-                <!-- Frosting Layer -->
                 <div class="w-full h-4 bg-white/90"></div>
-                <!-- Middle Layer Decoration Pattern -->
                 <div class="flex justify-evenly items-center my-auto">
                     <div class="w-3 h-3 bg-pink-400 rounded-full"></div>
                     <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
                     <div class="w-3 h-3 bg-pink-400 rounded-full"></div>
                     <div class="w-3 h-3 bg-yellow-300 rounded-full"></div>
                 </div>
-                <!-- Cream Base Edge -->
                 <div class="w-full h-3 bg-pink-200"></div>
             </div>
 
             <!-- TIER 3 (BOTTOM TIER) -->
             <div class="w-60 h-22 bg-amber-100 rounded-t-2xl relative z-0 cake-shadow -mt-2 border-t-4 border-amber-50 overflow-hidden flex flex-col justify-between">
-                <!-- Top Frosting -->
                 <div class="w-full h-5 bg-pink-400"></div>
-                <!-- Decorative Swirls -->
                 <div class="flex justify-around items-center px-4">
                     <span class="text-pink-300 text-xs">♥</span>
                     <span class="text-purple-300 text-xs">♥</span>
@@ -223,7 +208,6 @@
                     <span class="text-purple-300 text-xs">♥</span>
                     <span class="text-pink-300 text-xs">♥</span>
                 </div>
-                <!-- Chocolate/Caramel Base -->
                 <div class="w-full h-4 bg-amber-200"></div>
             </div>
 
@@ -249,10 +233,11 @@
                 <span>Kembang Api 🎉</span>
             </button>
 
-            <button class="w-full sm:w-auto px-5 py-4 bg-gradient-to-r from-purple-400 to-indigo-400 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-sparkles">
-            <a href=menu.html>Lanjut ==></a>
-            </button>
+            <!-- Next Page Link (Fixed Syntax) -->
+            <a href="menu.html" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-purple-400 to-indigo-400 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-arrow-right"></i>
+                <span>Lanjut</span>
+            </a>
 
         </div>
 
@@ -321,7 +306,6 @@
 
         // Trigger Confetti Effect using Canvas-Confetti
         function triggerConfetti() {
-            // Left burst
             confetti({
                 particleCount: 50,
                 angle: 60,
@@ -330,7 +314,6 @@
                 colors: ['#ffb7b2', '#ffda79', '#a29bfe', '#fd79a8']
             });
 
-            // Right burst
             confetti({
                 particleCount: 50,
                 angle: 120,
@@ -340,15 +323,17 @@
             });
         }
 
-        // Synthesize a simple soft blow sound using Web Audio API (No external sound files needed)
+        // Soft blow sound using Web Audio API (Fixed for Android Audio Policy)
         function playBlowSound() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const bufferSize = ctx.sampleRate * 0.5; // 0.5 seconds sound
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+                const bufferSize = ctx.sampleRate * 0.5;
                 const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
                 const data = buffer.getChannelData(0);
 
-                // Generate white noise for blow sound
                 for (let i = 0; i < bufferSize; i++) {
                     data[i] = Math.random() * 2 - 1;
                 }
@@ -356,7 +341,6 @@
                 const noise = ctx.createBufferSource();
                 noise.buffer = buffer;
 
-                // Filter for soft wind sound
                 const filter = ctx.createBiquadFilter();
                 filter.type = 'lowpass';
                 filter.frequency.value = 400;
@@ -381,7 +365,6 @@
             const micIcon = document.getElementById('micIcon');
 
             if (isMicActive) {
-                // Stop Microphone
                 if (micStream) {
                     micStream.getTracks().forEach(track => track.stop());
                 }
@@ -394,6 +377,11 @@
             try {
                 micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                if (audioContext.state === 'suspended') {
+                    await audioContext.resume();
+                }
+
                 analyser = audioContext.createAnalyser();
                 const source = audioContext.createMediaStreamSource(micStream);
                 
@@ -406,7 +394,7 @@
 
                 detectBlow();
             } catch (err) {
-                alert('Akses mikrofon ditolak atau tidak didukung di perangkat ini.');
+                alert('Akses mikrofon ditolak atau perlu protokol HTTPS.');
                 console.error(err);
             }
         }
@@ -425,8 +413,8 @@
             }
             let average = sum / bufferLength;
 
-            // Threshold for blow detection
-            if (average > 45 && isCandleLit) {
+            // Threshold volume tiupan (bisa disesuaikan jika kurang peka)
+            if (average > 40 && isCandleLit) {
                 toggleCandle();
             }
 
